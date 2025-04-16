@@ -19,6 +19,51 @@ public class MathController {
         return covertToDouble(numberOne) + covertToDouble(numberTwo);
     }
 
+    @GetMapping(value = "/subtraction/{numberOne}/{numberTwo}")
+    public Double subtraction(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value");
+        }
+        return covertToDouble(numberOne) - covertToDouble(numberTwo);
+    }
+
+    @GetMapping(value = "/multiplication/{numberOne}/{numberTwo}")
+    public Double multiplication(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value");
+        }
+        return covertToDouble(numberOne) * covertToDouble(numberTwo);
+    }
+
+    @GetMapping(value = "/division/{numberOne}/{numberTwo}")
+    public Double division(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value");
+        }
+        return covertToDouble(numberOne) / covertToDouble(numberTwo);
+    }
+
+    @GetMapping(value = "/mean/{numberOne}/{numberTwo}")
+    public Double mean(@PathVariable(value = "numberOne") String numberOne, @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value");
+        }
+        return (covertToDouble(numberOne) + covertToDouble(numberTwo)) / 2;
+    }
+
+    @GetMapping(value = "/squareRoot/{number}")
+    public Double squareRoot(@PathVariable(value = "number") String number) throws Exception {
+
+        if (!isNumeric(number)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value");
+        }
+        return Math.sqrt(covertToDouble(number));
+    }
+
     public static Double covertToDouble(String strNumber) {
         if (strNumber == null) return 0d;
         String number = strNumber.replaceAll(",", ".");
