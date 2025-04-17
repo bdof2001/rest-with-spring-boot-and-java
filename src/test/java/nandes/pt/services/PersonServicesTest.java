@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,5 +79,19 @@ public class PersonServicesTest {
         // Then / Assert
         assertNotNull(personList);
         assertEquals(2, personList.size());
+    }
+
+    @DisplayName("JUnit test for Given Empty Persons List when findAll Persons then Return Empty Persons List")
+    @Test
+    void testGivenEmptyPersonsList_WhenFindAllPersons_thenReturnEmptyPersonsList() {
+        // Given / Arrange
+        given(repository.findAll()).willReturn(Collections.emptyList());
+
+        // When / Act
+        List<Person> personList = services.findAll();
+
+        // Then / Assert
+        assertTrue(personList.isEmpty());
+        assertEquals(0, personList.size());
     }
 }
