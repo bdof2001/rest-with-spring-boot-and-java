@@ -16,6 +16,9 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -83,7 +86,7 @@ public class PersonControllerIntegrationTest extends AbstractIntegrationTest {
     void integrationTestGivenPersonObject_when_UpdateOnePerson_ShouldReturnAUpdatedPersonObject() throws JsonMappingException, JsonProcessingException {
 
         person0.setFirstName("Leonardo");
-        person0.setEmail("leonardo@erudio.com.br");
+        person0.setEmail("leonardocosta@gmail.com");
 
         var content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
@@ -114,7 +117,7 @@ public class PersonControllerIntegrationTest extends AbstractIntegrationTest {
         assertEquals("Costa", updatedPerson.getLastName());
         assertEquals("Rua do Campo", updatedPerson.getAddress());
         assertEquals("Male", updatedPerson.getGender());
-        assertEquals("leonardo@gmail.com", updatedPerson.getEmail());
+        assertEquals("leonardocosta@gmail.com", updatedPerson.getEmail());
     }
 
     @Test
@@ -148,6 +151,76 @@ public class PersonControllerIntegrationTest extends AbstractIntegrationTest {
         assertEquals("Costa", foundPerson.getLastName());
         assertEquals("Rua do Campo", foundPerson.getAddress());
         assertEquals("Male", foundPerson.getGender());
-        assertEquals("leonardo@gmail.com", foundPerson.getEmail());
+        assertEquals("leonardocosta@gmail.com", foundPerson.getEmail());
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("JUnit integration given Person Object when findAll should Return a Persons List")
+    void integrationTest_when_findAll_ShouldReturnAPersonsList() throws JsonMappingException, JsonProcessingException {
+
+        Person anotherPerson = new Person(
+                "Gabriela",
+                "Rodriguez",
+                "gabi@gmail.com",
+                "Rua do Campo",
+                "Female"
+        );
+
+        given().spec(specification)
+                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .body(anotherPerson)
+                .when()
+                .post()
+                .then()
+                .statusCode(200);
+
+        var content = given().spec(specification)
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        Person[] myArray = objectMapper.readValue(content, Person[].class);
+        List<Person> people = Arrays.asList(myArray);
+
+        Person foundPersonOne = people.getFirst();
+
+        assertNotNull(foundPersonOne);
+
+        assertNotNull(foundPersonOne.getId());
+        assertNotNull(foundPersonOne.getFirstName());
+        assertNotNull(foundPersonOne.getLastName());
+        assertNotNull(foundPersonOne.getAddress());
+        assertNotNull(foundPersonOne.getGender());
+        assertNotNull(foundPersonOne.getEmail());
+
+        assertTrue(foundPersonOne.getId() > 0);
+        assertEquals("Leonardo", foundPersonOne.getFirstName());
+        assertEquals("Costa", foundPersonOne.getLastName());
+        assertEquals("Rua do Campo", foundPersonOne.getAddress());
+        assertEquals("Male", foundPersonOne.getGender());
+        assertEquals("leonardocosta@gmail.com", foundPersonOne.getEmail());
+
+        Person foundPersonTwo = people.get(1);
+
+        assertNotNull(foundPersonTwo);
+
+        assertNotNull(foundPersonTwo.getId());
+        assertNotNull(foundPersonTwo.getFirstName());
+        assertNotNull(foundPersonTwo.getLastName());
+        assertNotNull(foundPersonTwo.getAddress());
+        assertNotNull(foundPersonTwo.getGender());
+        assertNotNull(foundPersonTwo.getEmail());
+
+        assertTrue(foundPersonTwo.getId() > 0);
+        assertEquals("Gabriela", foundPersonTwo.getFirstName());
+        assertEquals("Rodriguez", foundPersonTwo.getLastName());
+        assertEquals("Rua do Campo", foundPersonTwo.getAddress());
+        assertEquals("Female", foundPersonTwo.getGender());
+        assertEquals("gabi@gmail.com", foundPersonTwo.getEmail());
     }
 }
