@@ -7,13 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 public class PersonRepositoryTest {
 
     @Autowired
-    private PersonRepository personRepository;
+    private PersonRepository repository;
 
     @DisplayName("Given Person Object when Save then Return Saved Person")
     @Test
@@ -23,10 +25,29 @@ public class PersonRepositoryTest {
         Person person0 = new Person("Leandro", "Costa", "leandrocosta@gmail.com", "Rua do Campo", "Male");
 
         // When / Act
-        Person savedPerson = personRepository.save(person0);
+        Person savedPerson = repository.save(person0);
 
         // Then / Assert
         assertNotNull(savedPerson);
         assertTrue(savedPerson.getId() > 0);
+    }
+
+    @DisplayName("Given Person List when findAll then Return Person List")
+    @Test
+    void testGivenPersonList_whenFindAll_thenReturnPersonList() {
+        // Given / Arrange
+
+        Person person0 = new Person("Leandro", "Costa", "leandrocosta@gmail.com", "Rua do Campo", "Male");
+        Person person1 = new Person("Leonardo", "Costa", "leonardocosta@gmail.com", "Rua do Campo", "Male");
+
+        repository.save(person0);
+        repository.save(person1);
+
+        // When / Act
+        List<Person> personList = repository.findAll();
+
+        // Then / Assert
+        assertNotNull(personList);
+        assertEquals(2, personList.size());
     }
 }
