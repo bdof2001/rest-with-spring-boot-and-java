@@ -18,7 +18,7 @@ public class PersonRepositoryTest {
     @Autowired
     private PersonRepository repository;
 
-    @DisplayName("Given Person Object when Save then Return Saved Person")
+    @DisplayName("JUnit test for Given Person Object when Save then Return Saved Person")
     @Test
     void testGivenPersonObject_whenSave_thenReturnSavedPerson() {
         // Given / Arrange
@@ -33,7 +33,7 @@ public class PersonRepositoryTest {
         assertTrue(savedPerson.getId() > 0);
     }
 
-    @DisplayName("Given Person List when findAll then Return Person List")
+    @DisplayName("JUnit test for Given Person List when findAll then Return Person List")
     @Test
     void testGivenPersonList_whenFindAll_thenReturnPersonList() {
         // Given / Arrange
@@ -52,7 +52,7 @@ public class PersonRepositoryTest {
         assertEquals(2, personList.size());
     }
 
-    @DisplayName("Given Person Object when findById then Return Person Object")
+    @DisplayName("JUnit test for Given Person Object when findById then Return Person Object")
     @Test
     void testGivenPersonObject_whenFindById_thenReturnPersonObject() {
         // Given / Arrange
@@ -69,7 +69,7 @@ public class PersonRepositoryTest {
         assertEquals(person0.getId(), savedPerson.getId());
     }
 
-    @DisplayName("Given Person Object when findByEmail then Return Person Object")
+    @DisplayName("JUnit test for Given Person Object when findByEmail then Return Person Object")
     @Test
     void testGivenPersonObject_whenFindByEmail_thenReturnPersonObject() {
         // Given / Arrange
@@ -86,7 +86,7 @@ public class PersonRepositoryTest {
         assertEquals(person0.getId(), savedPerson.getId());
     }
 
-    @DisplayName("Given Person Object when Update Person then Return Updated Person Object")
+    @DisplayName("JUnit test for Given Person Object when Update Person then Return Updated Person Object")
     @Test
     void testGivenPersonObject_whenUpdatePerson_thenReturnUpdatedPersonObject() {
         // Given / Arrange
@@ -108,7 +108,7 @@ public class PersonRepositoryTest {
         assertEquals("leonardocosta@gmail.com", updatedPerson.getEmail());
     }
 
-    @DisplayName("Given Person Object when Delete then Remove Person")
+    @DisplayName("JUnit test for Given Person Object when Delete then Remove Person")
     @Test
     void testGivenPersonObject_whenDelete_thenRemovePerson() {
         // Given / Arrange
@@ -124,5 +124,26 @@ public class PersonRepositoryTest {
 
         // Then / Assert
         assertTrue(personOptional.isEmpty());
+    }
+
+    @DisplayName("JUnit test for Given firstName and lastName when findByJPQL then Return Person Object")
+    @Test
+    void testGivenFirstNameAndLastName_whenFindByJPQL_thenReturnPersonObject() {
+        // Given / Arrange
+
+        Person person0 = new Person("Leandro", "Costa", "leandrocosta@gmail.com", "Rua do Campo", "Male");
+
+        repository.save(person0);
+
+        String firstName = "Leandro";
+        String lastName = "Costa";
+
+        // When / Act
+        Person savedPerson = repository.findByJPQL(firstName, lastName);
+
+        // Then / Assert
+        assertNotNull(savedPerson);
+        assertEquals(firstName, savedPerson.getFirstName());
+        assertEquals(lastName, savedPerson.getLastName());
     }
 }
