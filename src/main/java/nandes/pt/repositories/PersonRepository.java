@@ -13,15 +13,23 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     Optional<Person> findByEmail(String email);
 
-    @Query("SELECT p FROM Person p WHERE p.firstName = ?1 AND p.lastName = ?2")
+    // Define custom query using JPQL with index parameters
+    @Query("select p from Person p where p.firstName =?1 and p.lastName =?2")
     Person findByJPQL(String firstName, String lastName);
 
-    @Query("SELECT p FROM Person p WHERE p.firstName =:firstName AND p.lastName =:lastName")
-    Person findByJPQLNamedParameters(@Param("firstName") String firstName, @Param("lastName") String lastName);
+    // Define custom query using JPQL with named parameters
+    @Query("select p from Person p where p.firstName =:firstName and p.lastName =:lastName")
+    Person findByJPQLNamedParameters(
+            @Param("firstName") String firstName,
+            @Param("lastName") String lastName);
 
-    @Query(value = "SELECT * FROM Person p WHERE p.first_name = ?1 AND p.last_name = ?2", nativeQuery = true)
+    // Define custom query using Native SQL with index parameters
+    @Query(value = "select * from person p where p.first_name =?1 and p.last_name =?2", nativeQuery = true)
     Person findByNativeSQL(String firstName, String lastName);
 
-    @Query(value = "SELECT * FROM Person p WHERE p.first_name =:firstName AND p.last_name =:lastName", nativeQuery = true)
-    Person findByNativeSQLwithNamedParameters(@Param("firstName") String firstName, @Param("lastName") String lastName);
+    // Define custom query using Native SQL with named parameters
+    @Query(value = "select * from person p where p.first_name =:firstName and p.last_name =:lastName", nativeQuery = true)
+    Person findByNativeSQLwithNamedParameters(
+            @Param("firstName") String firstName,
+            @Param("lastName") String lastName);
 }
