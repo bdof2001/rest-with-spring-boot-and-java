@@ -36,8 +36,12 @@ public class PersonController {
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")
-    public Person update(@RequestBody Person person) {
-        return service.update(person);
+    public ResponseEntity<Person> update(@RequestBody Person person) {
+        try {
+            return ResponseEntity.ok(service.update(person));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")

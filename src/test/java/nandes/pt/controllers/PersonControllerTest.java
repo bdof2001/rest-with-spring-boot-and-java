@@ -146,4 +146,27 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$.lastName", is(updatedPerson.getLastName())))
                 .andExpect(jsonPath("$.email", is(updatedPerson.getEmail())));
     }
+
+    @Test
+    @DisplayName("JUnit test for Given Unexistent Person when Update then Return Not Found")
+    void testGivenUnexistentPerson_WhenUpdate_thenReturnNotFound() throws JsonProcessingException, Exception {
+
+        // Given / Arrange
+        long personId = 1L;
+        given(service.findById(personId)).willThrow(ResourceNotFoundException.class);
+        given(service.update(any(Person.class)))
+                .willAnswer((invocation) -> invocation.getArgument(1));
+
+        // When / Act
+        Person updatedPerson = new Person("Leonardo", "Costa", "leonardocosta@gmail.com", "Rua do Campo", "Male");
+
+        ResultActions response = mockMvc.perform(put("/person")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedPerson)));
+
+        // Then / Assert
+        response.
+                andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
