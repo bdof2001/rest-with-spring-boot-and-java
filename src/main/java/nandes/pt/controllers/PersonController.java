@@ -3,6 +3,7 @@ package nandes.pt.controllers;
 import nandes.pt.model.Person;
 import nandes.pt.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +37,8 @@ public class PersonController {
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
-    public void delete(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
         service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
