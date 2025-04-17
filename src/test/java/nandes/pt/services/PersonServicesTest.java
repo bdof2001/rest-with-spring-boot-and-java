@@ -95,9 +95,9 @@ public class PersonServicesTest {
         assertEquals(0, personList.size());
     }
 
-    @DisplayName("JUnit test for Given Person Id when findById then Return Person Object")
+    @DisplayName("JUnit test for Given Person ID when findById then Return Person Object")
     @Test
-    void testGivenPersonId_WhenFindById_thenReturnPersonObject() {
+    void testGivenPersonID_WhenFindById_thenReturnPersonObject() {
         // Given / Arrange
         given(repository.findById(anyLong())).willReturn(Optional.of(person0));
 
@@ -128,5 +128,21 @@ public class PersonServicesTest {
         assertNotNull(updatedPerson);
         assertEquals("Leonardo", updatedPerson.getFirstName());
         assertEquals("leonardocosta@gmail.com", updatedPerson.getEmail());
+    }
+
+    @DisplayName("JUnit test for Given Person ID when Delete Person then Return do Nothing")
+    @Test
+    void testGivenPersonID_WhenDeletePerson_thenReturnDoNothing() {
+        // Given / Arrange
+        person0.setId(1L);
+        given(repository.findById(anyLong())).willReturn(Optional.of(person0));
+        willDoNothing().given(repository).delete(person0);
+
+
+        // When / Act
+        services.delete(person0.getId());
+
+        // Then / Assert
+        verify(repository, times(1)).delete(person0);
     }
 }
