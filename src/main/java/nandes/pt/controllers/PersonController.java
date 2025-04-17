@@ -22,8 +22,12 @@ public class PersonController {
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public Person findById(@PathVariable(value = "id") Long id) {
-        return service.findById(id);
+    public ResponseEntity<Person> findById(@PathVariable(value = "id") Long id) {
+        try {
+            return ResponseEntity.ok(service.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

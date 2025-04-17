@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import nandes.pt.exceptions.ResourceNotFoundException;
 import nandes.pt.model.Person;
 import nandes.pt.services.PersonServices;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,5 +104,21 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$.firstName", is(person0.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(person0.getLastName())))
                 .andExpect(jsonPath("$.email", is(person0.getEmail())));
+    }
+
+    @Test
+    @DisplayName("JUnit test for Given Invalid PersonId when findById then Return Not Found")
+    void testGivenInvalidPersonId_WhenFindById_thenReturnNotFound() throws JsonProcessingException, Exception {
+
+        // Given / Arrange
+        long personId = 1L;
+        given(service.findById(personId)).willThrow(ResourceNotFoundException.class);
+
+        // When / Act
+        ResultActions response = mockMvc.perform(get("/person/{id}", personId));
+
+        // Then / Assert
+        response.andExpect(status().isNotFound())
+                .andDo(print());
     }
 }
