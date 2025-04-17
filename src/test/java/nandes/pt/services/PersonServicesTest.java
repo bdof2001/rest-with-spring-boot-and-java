@@ -1,5 +1,6 @@
 package nandes.pt.services;
 
+import nandes.pt.exceptions.ResourceNotFoundException;
 import nandes.pt.model.Person;
 import nandes.pt.repositories.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,5 +46,20 @@ public class PersonServicesTest {
         // Then / Assert
         assertNotNull(savedPerson);
         assertEquals("Leandro", savedPerson.getFirstName());
+    }
+
+    @DisplayName("JUnit test for Given Existing Email when Save then Throws Exception")
+    @Test
+    void testGivenExistingEmail_WhenSavePerson_thenThrowsException() {
+        // Given / Arrange
+        given(repository.findByEmail(anyString())).willReturn(Optional.of(person0));
+
+        // When / Act
+        assertThrows(ResourceNotFoundException.class, () -> {
+            services.create(person0);
+        });
+
+        // Then / Assert
+        verify(repository,never()).save(any(Person.class));
     }
 }
